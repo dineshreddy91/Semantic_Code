@@ -160,6 +160,15 @@ void DenseCRF2D::addPairwiseBilateral ( float sx, float sy, float sr, float sg, 
 	addPairwiseEnergy( feature, 5, w, function );
 	delete [] feature;
 }
+void DenseCRF2D::addPairwiseBilateral_height ( float sx, float sy, float sr, float sg, float sb, const unsigned char* im, float w, const SemiMetricFunction * function ) {
+	float * feature = new float [N_*5];
+	for( int j=0; j<H_; j++ )
+		for( int i=0; i<W_; i++ ){
+			feature[(j*W_+i)*5+2] = im[(i+j*W_)*3+0] / sr;
+			}
+	addPairwiseEnergy( feature, 5, w, function );
+	delete [] feature;
+}
 //////////////////////////////
 /////  Unary Potentials  /////
 //////////////////////////////

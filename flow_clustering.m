@@ -1,7 +1,7 @@
 function flow_clustering(i)
 dir_files= '/home/dineshn/new_code/dataset/';
 dataset=i;
-Imgs = dir([dir_files 'Left/' num2str(dataset) '/*']);
+Imgs = dir([dir_files 'flow/' num2str(dataset) '/*']);
 
 %% flow
 

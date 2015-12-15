@@ -1,28 +1,32 @@
+clc;
+clear all;
+close all;
 %for i=7:15
 dir_files= '/home/dineshn/new_code/dataset/';
-dataset=7;
+dataset=5;
 Imgs = dir([dir_files 'Left/' num2str(dataset) '/*']);
-
+%matlabpool
 
 %% check flow
 %compute_flow(dataset);
-
+%sf
 %% read flow file
 %flow_clustering(dataset);
-
+%dfd
 %% depth 
-%depth_only(i)
+%depth_only(dataset);
 
-
+%sfd
 %% texton potentials
-loop=5;
+for loop=3:size(Imgs,1)
+%loop=5;
 [pathstr,name,ext]=fileparts(Imgs(loop).name);
 image=imread([dir_files 'Left_png/' num2str(dataset) '/' name '.png']) ;
 [potentials]=read_textonpotentials([dir_files 'textonboost/' num2str(dataset) '/' name '.dns']);
 
 
 %% potentials from the video
-[potentials]=potentials_from_video(dataset)
+%[potentials]=potentials_from_video(dataset)
 
 
 %% write the new potentials
@@ -44,7 +48,7 @@ write_textonpotential([dir_files 'ours/' num2str(dataset) '/' name '.dns'],poten
 cd /home/dineshn/new_code/semantic_codes/densecrf/examples
 imwrite(image,'1.ppm');
 %system(['make']);
-system(['./dense_inference 1.ppm '  dir_files 'textonboost/' num2str(dataset) '/' name '_1.dns ' '2.ppm']);
+system(['./dense_inference 1.ppm '  dir_files 'textonboost/' num2str(dataset) '/' name '.dns ' '2.ppm']);
 array=csvread('labelled_image.csv');
 array(:,:)=array(:,:)+1;
 cd ../..
@@ -52,25 +56,12 @@ labelled_image_dense = reshape(array,[size(image,2) size(image,1)])';
 [ labelled_image_color_dense ] = label_to_color( labelled_image_dense );
 
 
-%% read  ground truth segmentation
-
-image_gt=imread([dir_files 'Groundtruth/' num2str(dataset) '/' name '.png']) ;
-[labelled_image_gt] = color_to_label(image_gt);
-
-%% read ALE
-% image_ale=imread([dir_files 'ALE_results/' num2str(dataset) '/' name '.png']) ;
-% [labelled_image_ale] = color_to_label(image_ale);
-
-%% compare the algorithm with GT
-
-results_ale=compare_the_results(labelled_image_gt,labelled_image_ale)
-results=compare_the_results(labelled_image_gt,labelled_image_dense)
-
 
 %% convert to color image
-[ labelled_image_color ] = label_to_color( labelled_image );
-imshow(labelled_image_color);
-
+% [ labelled_image_color ] = label_to_color( labelled_image );
+% imshow(labelled_image_color);
+% ginput(1);
+end
 % subplot(2,2,1);
 % imshow(image);
 % subplot(2,2,2);
@@ -80,3 +71,13 @@ imshow(labelled_image_color);
 % subplot(2,2,4);
 % imshow(image_ale);
 %end
+
+
+
+
+
+
+
+
+
+
